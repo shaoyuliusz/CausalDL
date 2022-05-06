@@ -1,21 +1,6 @@
 import tensorflow as tf
 import numpy as np
 from tensorflow.keras.callbacks import Callback
-'''
-def pdist2sq(A, B):
-    #helper for PEHEnn
-    #calculates squared euclidean distance between rows of two matrices  
-    #https://gist.github.com/mbsariyildiz/34cdc26afb630e8cae079048eef91865
-    # squared norms of each row in A and B
-    na = tf.reduce_sum(tf.square(A), 1)
-    nb = tf.reduce_sum(tf.square(B), 1)    
-    # na as a row and nb as a column vectors
-    na = tf.reshape(na, [-1, 1])
-    nb = tf.reshape(nb, [1, -1])
-    # return pairwise euclidean difference matrix
-    D = tf.sqrt(tf.maximum(na - 2*tf.matmul(A, B, False, True) + nb, 0.0))
-    return D
-'''
 
 class Base_Metrics(Callback):
     def __init__(self,data, verbose=0):   
@@ -28,6 +13,12 @@ class Base_Metrics(Callback):
         self.data['c_idx']=self.data['o_idx'][self.data['t'].squeeze()==0] #These are the indices of the control units
         self.data['t_idx']=self.data['o_idx'][self.data['t'].squeeze()==1] #These are the indices of the treated units
     
+    def pdist2sq(x,y):
+        x2 = tf.reduce_sum(x ** 2, axis=-1, keepdims=True)
+        y2 = tf.reduce_sum(y ** 2, axis=-1, keepdims=True)
+        dist = x2 + tf.transpose(y2, (1, 0)) - 2. * x @ tf.transpose(y, (1, 0))
+        return dist
+    
     def split_pred(self,concat_pred):
         preds={}
         preds['y0_pred'] = self.data['y_scaler'].inverse_transform(concat_pred[:, 0].reshape(-1, 1))
@@ -38,7 +29,11 @@ class Base_Metrics(Callback):
     def find_ynn(self, Phi):
         #helper for PEHEnn
         PhiC, PhiT =tf.dynamic_partition(Phi,tf.cast(tf.squeeze(self.data['t']),tf.int32),2) #separate control and treated reps
-        dists=tf.sqrt(pdist2sq(PhiC,PhiT)) #calculate squared distance then sqrt to get euclidean
+        PhiC2 = tf.reduce_sum(PhiC ** 2, axis=-1, keepdims=True)
+        PhiT2 = tf.reduce_sum(PhiT ** 2, axis=-1, keepdims=True)
+        dist = PhiC2 + tf.transpose(PhiT2, (1, 0)) - 2. * PhiC @ tf.transpose(PhiT, (1, 0))
+        dists = tf.sqrt(dist)
+        #dists=tf.sqrt(self.pdist2sq(PhiC,PhiT)) #calculate squared distance then sqrt to get euclidean
         yT_nn_idx=tf.gather(self.data['c_idx'],tf.argmin(dists,axis=0),1) #get c_idxs of smallest distances for treated units
         yC_nn_idx=tf.gather(self.data['t_idx'],tf.argmin(dists,axis=1),1) #get t_idxs of smallest distances for control units
         yT_nn=tf.gather(self.data['y'],yT_nn_idx,1) #now use these to retrieve y values
@@ -49,7 +44,7 @@ class Base_Metrics(Callback):
     def PEHEnn(self,concat_pred):
         p = self.split_pred(concat_pred)
         y_nn = self.find_ynn(p['phi']) #now its 3 plus because 
-        cate_nn_err=tf.reduce_mean( tf.square( (1-2*self.data['t']) * (y_nn-self.data['y']) - (p['y1_pred']-p['y0_pred']) ) )
+        cate_nn_err=tf.reduce_mean(tf.square((1-2*self.data['t']) * (y_nn-self.data['y']) - (p['y1_pred']-p['y0_pred'])))
         return cate_nn_err
 
     def ATE(self,concat_pred):
@@ -105,7 +100,11 @@ class AIPW_Metrics(Callback):
     def find_ynn(self, Phi):
         #helper for PEHEnn
         PhiC, PhiT =tf.dynamic_partition(Phi,tf.cast(tf.squeeze(self.data['t']),tf.int32),2) #separate control and treated reps
-        dists=tf.sqrt(self.pdist2sq(PhiC,PhiT)) #calculate squared distance then sqrt to get euclidean
+        PhiC2 = tf.reduce_sum(PhiC ** 2, axis=-1, keepdims=True)
+        PhiT2 = tf.reduce_sum(PhiT ** 2, axis=-1, keepdims=True)
+        dist = PhiC2 + tf.transpose(PhiT2, (1, 0)) - 2. * PhiC @ tf.transpose(PhiT, (1, 0))
+        dists = tf.sqrt(dist)
+        #dists=tf.sqrt(self.pdist2sq(PhiC,PhiT)) #calculate squared distance then sqrt to get euclidean
         yT_nn_idx=tf.gather(self.data['c_idx'],tf.argmin(dists,axis=0),1) #get c_idxs of smallest distances for treated units
         yC_nn_idx=tf.gather(self.data['t_idx'],tf.argmin(dists,axis=1),1) #get t_idxs of smallest distances for control units
         yT_nn=tf.gather(self.data['y'],yT_nn_idx,1) #now use these to retrieve y values

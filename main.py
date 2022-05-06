@@ -18,9 +18,9 @@ from utils import config
 from utils.data_reader import read_IHDP_data, read_SIPP_data
 
 from model.model_metrics import AIPW_Metrics, TarReg_Metrics, Base_Metrics
-from model.model_loss import Base_Dragon_Loss, TarReg_Loss, MSE_Loss
+from model.model_loss import Base_Dragon_Loss, TarReg_Loss, MSE_Loss, CFRNet_Loss
 from model.models import TARNet, CFRNet, DragonNetAIPW, DragonNetTR
-from model.common_layer import RepresentLayer, HypothesisLayer
+from model.common_layer import RepresentLayer, HypothesisLayer, EpsilonLayer
 
 i = 123
 np.random.seed(i)
@@ -73,11 +73,10 @@ elif config.model == "dragonnetTR":
     tarreg_loss=TarReg_Loss(alpha=1)
 
     model.compile(optimizer=SGD(learning_rate=config.lr, momentum=config.momentum, nesterov=config.nesterov),
-                          loss=tarreg_loss,
-                     metrics=[tarreg_loss,tarreg_loss.regression_loss,tarreg_loss.treatment_acc])
+                          loss=tarreg_loss,metrics=[tarreg_loss,tarreg_loss.regression_loss,tarreg_loss.treatment_acc])
     start_time = time.time()
     model.fit(x=data['x'],y=yt,
-                     callbacks=basic_callbacks,
+                     callbacks=basic_callback,
                       validation_split=config.val_split,
                       epochs=config.num_epoch,
                       batch_size=config.batch_size,
@@ -102,12 +101,11 @@ elif config.model == "dragonnet":
     print("***************************** training_time is: ", elapsed_time)
 
 elif config.model == "cfrnet":
-    adam_callback = [
+    adam_callbacks = [
         TerminateOnNaN(),
         EarlyStopping(monitor='val_loss', patience=2, min_delta=0.),
         ReduceLROnPlateau(monitor='loss', factor=0.5, patience=5, verbose=config.verbose, mode='auto',
                           min_delta=1e-8, cooldown=0, min_lr=0),
-        tensorboard_callback,
         Base_Metrics(data,verbose=config.verbose)
     ]
     
@@ -121,7 +119,7 @@ elif config.model == "cfrnet":
     model.fit(x=data['x'],y=yt,
                      callbacks=adam_callbacks,
                       validation_split=config.val_split,
-                      epochs=num_epoch,
+                      epochs=config.num_epoch,
                       batch_size=config.batch_size,
                       verbose=config.verbose)
     
@@ -146,10 +144,10 @@ def compute_prediction(data, model):
     data_save = {}      
     data_save['cate_pred'] = cate_pred
     
-    if 'mu_1' or 'mu_0' in data.keys():
+    if 'mu_1' in data.keys() or 'mu_0' in data.keys():
         cate_true=data['mu_1']-data['mu_0'] #Hill's noiseless true values
         data_save['cate_true'] = cate_true
-    print("Actual ATE:", cate_true.mean(),'\n\n')
+        print("Actual ATE:", cate_true.mean(),'\n\n')
     ate_pred=tf.reduce_mean(cate_pred)
     print("Estimated ATE:", ate_pred.numpy(),'\n\n')
     data_save['ate_pred'] = ate_pred

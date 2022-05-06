@@ -7,8 +7,7 @@ from tensorflow.keras import regularizers
 from tensorflow.keras import Model
 from tensorflow.keras.layers import Layer
 
-from model.common_layer import RepresentLayer
-from model.common_layer import HypothesisLayer
+from model.common_layer import RepresentLayer, HypothesisLayer, EpsilonLayer
 from utils import config
 
 class TARNet(Model):
@@ -17,7 +16,7 @@ class TARNet(Model):
     https://arxiv.org/pdf/1606.03976.pdf
     """
     def __init__(self, name='tarnet', **kwargs):
-        super(TARNet,self).__init__(name=name, **kwargs)
+        super().__init__(name=name, **kwargs)
         self.repre_layer = RepresentLayer(num_units = config.num_units_rep, activation = config.actv, kernel_init = config.kernel_init)
         self.hypo_layer = HypothesisLayer(num_units = config.num_units_hypo, activation = config.actv, kernel_reg = config.kernel_reg, reg_param = config.reg_param)
 
@@ -34,7 +33,7 @@ class CFRNet(Model):
     https://arxiv.org/pdf/1606.03976.pdf
     """
     def __init__(self, name='cfrnet', **kwargs):
-        super(TARNet,self).__init__(name=name, **kwargs)
+        super().__init__(name=name, **kwargs)
         self.repre_layer = RepresentLayer(num_units = config.num_units_rep, activation = config.actv, kernel_init = config.kernel_init)
         self.hypo_layer = HypothesisLayer(num_units = config.num_units_hypo, activation = config.actv, kernel_reg = config.kernel_reg, reg_param = config.reg_param)
 
@@ -75,13 +74,14 @@ class DragonNetTR(Model):
         self.repre_layer = RepresentLayer(num_units = config.num_units_rep, activation = config.actv, kernel_init = config.kernel_init)
         self.hypo_layer = HypothesisLayer(num_units = config.num_units_hypo, activation = config.actv, kernel_reg = config.kernel_reg, reg_param = config.reg_param)
         self.prop_layer = Dense(units=1,activation=None, name='t_prediction')
-
+        self.epsilon_layer = EpsilonLayer()
+    
     def call(self, inputs):
         phi = self.repre_layer(inputs)
         y0_pred, y1_pred = self.hypo_layer(phi)
         #propensity prediction
         #Note that the activation is actually sigmoid, but we will squish it in the loss function for numerical stability reasons
-        t_prediction = prop_layer(phi) 
-        epsilons = EpsilonLayer()(t_predictions)
-        concat_pred = Concatenate(1)([y0_predictions, y1_predictions,epsilons,phi])
+        t_prediction = self.prop_layer(phi) 
+        epsilons = self.epsilon_layer(t_prediction)
+        concat_pred = Concatenate(1)([y0_pred, y1_pred,epsilons,phi])
         return concat_pred

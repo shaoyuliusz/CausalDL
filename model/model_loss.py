@@ -115,6 +115,7 @@ class TarReg_Loss(Base_Dragon_Loss):
 
         # final
         loss = standard_loss + self.beta * targeted_regularization
+        print('lssssss')
         return loss
 
 def pdist2sq(x,y):

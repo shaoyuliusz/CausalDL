@@ -5,7 +5,7 @@ import argparse
 parser = argparse.ArgumentParser()
 #tarnet, cfrnet, dragonnet, dragonnetTR
 #IHDP, SIPP
-parser.add_argument("--model", type=str, default = 'tarnet')
+parser.add_argument("--model", type=str, default = "dragonnetTR")
 parser.add_argument("--dataset", type=str, default = 'IHDP')
 
 parser.add_argument("--num_units_rep", type=int, default=200)
@@ -55,8 +55,5 @@ val_split = arg.val_split
 batch_size = arg.batch_size
 num_epoch = arg.num_epoch
 
-#name = arg.model
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s %(message)s", datefmt="%m-%d %H:%M")
-#filename='save/logs/{}.log'.format(str(name)))
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s', datefmt='%m-%d %H:%M')#,filename='save/logs/{}.log'.format(str(name)))
 collect_stats = False
