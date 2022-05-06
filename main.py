@@ -22,6 +22,7 @@ from model.model_loss import Base_Dragon_Loss, TarReg_Loss, MSE_Loss, CFRNet_Los
 from model.models import TARNet, CFRNet, DragonNetAIPW, DragonNetTR
 from model.common_layer import RepresentLayer, HypothesisLayer, EpsilonLayer
 
+
 i = 123
 np.random.seed(i)
     
@@ -66,7 +67,7 @@ if config.model == "tarnet":
                     batch_size=config.batch_size,
                     verbose=config.verbose)
     elapsed_time = time.time() - start_time
-    print("***************************** training_time is: ", elapsed_time)
+    print("*********training_time is**********: ", elapsed_time)
 
 elif config.model == "dragonnetTR":
     basic_callback.append(TarReg_Metrics(data, verbose=config.verbose)) 
@@ -82,7 +83,7 @@ elif config.model == "dragonnetTR":
                       batch_size=config.batch_size,
                       verbose=config.verbose)
     elapsed_time = time.time() - start_time
-    print("***************************** training_time is: ", elapsed_time)
+    print("*********training_time is**********: ", elapsed_time)
 elif config.model == "dragonnet":
     basic_callback.append(AIPW_Metrics(data,verbose=config.verbose))
     aipw_loss=Base_Dragon_Loss(alpha=1.0)
@@ -98,7 +99,7 @@ elif config.model == "dragonnet":
                       batch_size=config.batch_size,
                       verbose=config.verbose)
     elapsed_time = time.time() - start_time
-    print("***************************** training_time is: ", elapsed_time)
+    print("*********training_time is**********: ", elapsed_time)
 
 elif config.model == "cfrnet":
     adam_callbacks = [
@@ -124,7 +125,7 @@ elif config.model == "cfrnet":
                       verbose=config.verbose)
     
     elapsed_time = time.time() - start_time
-    print("***************************** training_time is: ", elapsed_time)
+    print("*********training_time is**********: ", elapsed_time)
 
 # model.save('./save/trained_models/{}'.format(config.model+'_'+config.dataset))
 # print('model saved!')

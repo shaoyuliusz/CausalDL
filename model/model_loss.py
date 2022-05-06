@@ -8,6 +8,7 @@ from tensorflow.keras.losses import Loss
 """
 Define custom loss functions for TarNet, CFRNet and DragonNet
 """
+#code is based and modified from https://github.com/kochbj/Deep-Learning-for-Causal-Inference
 
 def MSE_Loss(concat_true, concat_pred):
     #standard MSE loss for TARNet

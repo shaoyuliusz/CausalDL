@@ -1,7 +1,7 @@
 import tensorflow as tf
 import numpy as np
 from tensorflow.keras.callbacks import Callback
-
+#code is based and modified from https://github.com/kochbj/Deep-Learning-for-Causal-Inference and https://github.com/claudiashi57/dragonnet
 class Base_Metrics(Callback):
     def __init__(self,data, verbose=0):   
         super(Base_Metrics, self).__init__()

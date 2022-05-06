@@ -13,7 +13,7 @@ parser.add_argument("--num_units_hypo", type=int, default=100)
 parser.add_argument("--actv", type=str, default='elu')
 parser.add_argument("--kernel_init", type=str, default='RandomNormal')
 parser.add_argument("--kernel_reg", type=str, default='L2')
-parser.add_argument("--reg_param", type=int, default=0.01)
+parser.add_argument("--reg_param", type=float, default=0.01)
 parser.add_argument("--lr", type=int, default=1e-5)
 parser.add_argument("--momentum", type=int, default=0.9)
 parser.add_argument("--nesterov", type=bool, default=True)
@@ -36,7 +36,7 @@ def print_opts(opts):
             print("{:>30}: {:<30}".format(key, opts.__dict__[key]).center(80))
     print("=" * 80)
 
-arg = parser.parse_args(args=[])
+arg = parser.parse_args()
 print_opts(arg)
 
 model = arg.model

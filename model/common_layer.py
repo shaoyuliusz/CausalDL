@@ -9,6 +9,7 @@ import numpy as np
 """
 Define the representation layer class and hypothesis layer class for TARNet, CFRNet and DragonNet
 """
+#code is based and modified from https://github.com/kochbj/Deep-Learning-for-Causal-Inference
 
 class RepresentLayer(Layer):
     def __init__(self, num_units = 200, activation = 'elu', kernel_init = 'RandomNormal'):
