@@ -5,7 +5,7 @@ import argparse
 parser = argparse.ArgumentParser()
 #tarnet, cfrnet, dragonnet, dragonnetTR
 #IHDP, SIPP
-parser.add_argument("--model", type=str, default = "dragonnetTR")
+parser.add_argument("--model", type=str, nargs="?", default = "dragonnetTR")
 parser.add_argument("--dataset", type=str, default = 'IHDP')
 
 parser.add_argument("--num_units_rep", type=int, default=200)
@@ -36,7 +36,8 @@ def print_opts(opts):
             print("{:>30}: {:<30}".format(key, opts.__dict__[key]).center(80))
     print("=" * 80)
 
-arg = parser.parse_args(args=[])
+arg = parser.parse_args()
+#print(arg)
 print_opts(arg)
 
 model = arg.model
