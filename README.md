@@ -1,7 +1,7 @@
 # Final Project --  Deep Learning for Causal Inference
 
 
-Tensorflow 2.8.0 implementation of the following models: TARNet, CFRNet and DragonNet, based on the following papers:
+This Tensorflow 2.8.0 implementation of the following models: TARNet, CFRNet and DragonNet based on the following papers:
 
 ## Acknowledgement
 **1. Estimating individual treatment effect: generalization bounds and algorithms**. **Uri Shalit**, Uri Shalit, Fredrik D. Johansson, David Sontag
@@ -18,10 +18,6 @@ Data is located in folder ./data.
 
 IHDP dataset is a semi-synthetic dataset based on a randomized experiment of Infant Health and Development Program.
 
-## Demo Notebook
-Example of command: </br>
-
-    !python3 main.py --model tarnet --dataset IHDP
 ## Dependency
 Check the packages needed or simply run the command
 Requirements
@@ -34,3 +30,22 @@ Requirements
 ❱❱❱ pip install -r requirements.txt
 ```
 
+## Training&Testing
+
+Example of command: 
+TARNet </br>
+```console
+❱❱❱ python3 main.py --model tarnet --dataset IHDP
+```
+CFRNet
+```console    
+❱❱❱ python3 main.py --model cfrnet --dataset IHDP
+```
+DragonNet (with AIPW)
+```console     
+❱❱❱ python3 main.py --model dragonnet --dataset IHDP
+```
+DragonNet (with Targeted Regularization)
+```console    
+❱❱❱ python3 main.py --model dragonnetTR --dataset IHDP
+```
