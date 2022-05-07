@@ -3,7 +3,6 @@
 
 This is Tensorflow 2.8.0 implementation of the following models: TARNet, CFRNet and DragonNet based on the following papers:
 
-## Acknowledgement
 **1. Estimating individual treatment effect: generalization bounds and algorithms**. **Uri Shalit**, Uri Shalit, Fredrik D. Johansson, David Sontag
   ***PMLR 2017*** [[PDF]](https://proceedings.mlr.press/v70/shalit17a/shalit17a.pdf)
 
