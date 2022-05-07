@@ -1,7 +1,7 @@
 # Final Project --  Deep Learning for Causal Inference
 
 
-This Tensorflow 2.8.0 implementation of the following models: TARNet, CFRNet and DragonNet based on the following papers:
+This is Tensorflow 2.8.0 implementation of the following models: TARNet, CFRNet and DragonNet based on the following papers:
 
 ## Acknowledgement
 **1. Estimating individual treatment effect: generalization bounds and algorithms**. **Uri Shalit**, Uri Shalit, Fredrik D. Johansson, David Sontag
