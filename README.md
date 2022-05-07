@@ -12,7 +12,25 @@ This Tensorflow 2.8.0 implementation of the following models: TARNet, CFRNet and
 **3. Deep Learning of Potential Outcomes**. [**Bernard Koch**](https://github.com/kochbj), Tim Sainburg2, Pablo Geraldo Bastias, Song Jiang, Yizhou Sun, Jacob Foster ***SocArXiv*** [[PDF]](https://arxiv.org/pdf/2110.04442.pdf)
 
 ## Organization of this directory
-
+.
+├── README.md
+├── data
+│   ├── IHDP
+│   │   ├── ihdp_npci_1-100.test.npz
+│   │   └── ihdp_npci_1-100.train.npz
+│   └── SIPP
+│       └── sipp1991.dta
+├── main.py
+├── model
+│   ├── common_layer.py
+│   ├── model_loss.py
+│   ├── model_metrics.py
+│   └── models.py
+├── notebook
+│   ├── causalDL_hyperparam_opitm.ipynb
+│   └── notebook_test.ipynb
+├── requirements.txt
+├── save
 ## Data
 Data is located in folder ./data. 
 
