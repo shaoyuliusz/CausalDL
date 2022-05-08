@@ -71,4 +71,4 @@ DragonNet (with Targeted Regularization)
 
 
 ## The result of the ablation study
-< img src="https://github.com/shaoyuliusz/CausalDL/blob/main/save/pred_result/plot/ablation.png" width="15%">
+< img src="https://github.com/shaoyuliusz/CausalDL/tree/main/save/pred_result/plot/ablation.png" width="15%">
