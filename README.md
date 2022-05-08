@@ -101,3 +101,6 @@ DragonNet (with Targeted Regularization)
 <p align="center">
 <img src="save/pred_result/plot/finetuned.png" width="40%" />
 </p>
+
+## Authors
+Shaoyu Liu & Jinhui(Ferry) Wu
