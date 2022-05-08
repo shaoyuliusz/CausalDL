@@ -68,3 +68,6 @@ DragonNet (with Targeted Regularization)
 ```console    
 ❱❱❱ python3 main.py --model dragonnetTR --dataset IHDP
 ```
+
+
+## The result of the ablation study
