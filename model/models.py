@@ -63,7 +63,9 @@ class DragonNetAIPW(Model):
         t_pred = self.prop_layer(phi) 
         concat_pred = Concatenate(1)([y0_pred, y1_pred,t_pred,phi])
         return concat_pred
-        
+
+#tarnet
+
 class DragonNetTR(Model):
     """
     DragonNet with Targeted Regularization
